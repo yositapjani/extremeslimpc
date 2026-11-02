@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExtremeSlimPC - Extreme Windows 11 debloat + privacy hardening</title>
+<style>
+body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: #0f1115; color: #e6e6e6; margin: 0; line-height: 1.6; }
+main { max-width: 860px; margin: 0 auto; padding: 32px 20px 64px; }
+h1 { font-size: 2.2em; margin-bottom: 0; }
+h2 { margin-top: 36px; border-bottom: 1px solid #2a2e37; padding-bottom: 6px; }
+.tagline { color: #9aa4b2; font-size: 1.1em; }
+pre { background: #1a1e26; border: 1px solid #2a2e37; border-radius: 8px; padding: 14px 16px; overflow-x: auto; }
+code { font-family: Consolas, Menlo, monospace; font-size: 0.92em; }
+.cmdbox { display: flex; gap: 10px; align-items: stretch; }
+.cmdbox pre { flex: 1; margin: 0; }
+button { background: #2ea043; color: #fff; border: 0; border-radius: 8px; padding: 0 18px; cursor: pointer; font-size: 1em; }
+button:hover { background: #3fb950; }
+.warn { background: #2a1e14; border: 1px solid #7a4a12; border-radius: 8px; padding: 12px 16px; }
+a { color: #58a6ff; }
+ul { padding-left: 22px; }
+footer { color: #9aa4b2; margin-top: 48px; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<main>
+<h1>ExtremeSlimPC</h1>
+<p class="tagline">Extreme Windows 11 debloat + privacy hardening, as a single copy-paste command. One readable script, no mystery tool, no background service.</p>
+
+<h2>Run it</h2>
+<p>Run in <strong>Windows PowerShell as Administrator</strong>, then paste:</p>
+<div class="cmdbox">
+<pre><code id="cmd">irm https://raw.githubusercontent.com/yositapjani/extremeslimpc/main/extremeslimpc.ps1 | iex</code></pre>
+<button onclick="copyCmd()">Copy</button>
+</div>
+<p>The script prints its plan, waits 10 seconds so you can cancel with Ctrl+C, then works through every section and logs to <code>$env:TEMP\extremeslimpc.log</code>. No reboot required. Review the script first on <a href="https://github.com/yositapjani/extremeslimpc">GitHub</a>.</p>
+
+<h2>What it does</h2>
+<ul>
+<li><strong>Removes</strong> 21 bundled apps (user + provisioned), including the Xbox stack: Bing News/Weather, Solitaire, To Do, Alarms, Sound Recorder, Zune Music, Feedback Hub, Get Help, Office Hub, Power Automate, Clipchamp, DevHome, Teams, Phone Link, new Outlook, Gaming App, Xbox overlays and identity.</li>
+<li><strong>Disables</strong> 14 services: telemetry (DiagTrack), geolocation, maps, Connected Devices / PIM sync, Insider, and Xbox services.</li>
+<li><strong>Disables</strong> 8 scheduled tasks: CEIP, Compatibility Appraiser, PcaPatchDbTask, StartupAppTask, Location, Maps toast, Disk Diagnostic collector.</li>
+<li><strong>Sets</strong> 14 privacy policies: telemetry 0, location Deny, no Start ads, no silent app installs, Cortana off, Bing search off, OneDrive blocked, Delivery Optimization HTTP-only, consumer features off.</li>
+<li><strong>Uninstalls OneDrive</strong> and removes Edge autostart and OneDrive tasks.</li>
+</ul>
+
+<h2>What it does NOT touch</h2>
+<ul>
+<li>Microsoft Store (kept on purpose, so removed apps can be reinstalled)</li>
+<li>Windows Defender, Windows Update, printing, Search indexing, SysMain, runtimes</li>
+<li>Your files, your Steam library, your drivers</li>
+</ul>
+
+<div class="warn">
+<strong>Warning:</strong> Do not run this if you depend on OneDrive sync or on Xbox / Game Bar. Your OneDrive files are not deleted: a non-empty OneDrive folder is left untouched. Removed Store apps can be reinstalled from the Store.
+</div>
+
+<h2>Restore</h2>
+<p>To undo the services, tasks, and policies (apps must be reinstalled from the Store yourself), run as Administrator:</p>
+<pre><code>irm https://raw.githubusercontent.com/yositapjani/extremeslimpc/main/extremeslimpc-restore.ps1 | iex</code></pre>
+<p>Then reboot. Full documentation, including optional power-plan and pagefile guidance, is in the <a href="https://github.com/yositapjani/extremeslimpc/blob/main/README.md">README</a>.</p>
+
+<footer>ExtremeSlimPC &middot; MIT License &middot; <a href="https://github.com/yositapjani/extremeslimpc">github.com/yositapjani/extremeslimpc</a></footer>
+</main>
+<script>
+function copyCmd() {
+  var t = document.getElementById('cmd').innerText;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t);
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = t; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+}
+</script>
+</body>
+</html>
